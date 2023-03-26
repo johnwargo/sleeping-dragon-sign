@@ -1,3 +1,16 @@
+/***********************************************
+  Sleeping Dragon Sign
+
+  Created March 26, 2023
+  by John M. Wargo
+  https://johnwargo.com
+  https://github.com/johnwargo/sleeping-dragon-sign
+
+  Illuminates a "Warning, Sleeping Dragon" sign
+  with three different strands of NeoPixels  
+
+**************************************************/
+
 #include <FastLED.h>
 
 // first strand
