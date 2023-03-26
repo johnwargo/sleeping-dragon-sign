@@ -55,6 +55,8 @@ void loop() {
 }
 
 void doStrandOneThing() {
+  // Alternate the Warning Symbols White
+
 }
 
 // void doStrandTwoThing() {
@@ -64,8 +66,12 @@ void doStrandOneThing() {
 // }
 
 void doStrandTwoAndThreeThing() {
+  // Fade Strand two and three up and down
+
 }
 
 
 void doThatOtherThing() {
+  // Blink everything
+  
 }
