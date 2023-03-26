@@ -67,11 +67,12 @@ void doStrandOneThing() {
 
 void doStrandTwoAndThreeThing() {
   // Fade Strand two and three up and down
+  // strand 2 Red, strand 3 White
 
 }
 
 
 void doThatOtherThing() {
-  // Blink everything
-  
+  // Blink everything, strand 1 White, everything else Red
+
 }
