@@ -28,6 +28,8 @@ CRGB leds1[NUM_LEDS_1];
 CRGB leds2[NUM_LEDS_2];
 CRGB leds3[NUM_LEDS_3];
 
+bool detectSomething;
+
 void setup() {
   // Initialize all of the LED arrays
   FastLED.addLeds<NEOPIXEL, DATA_PIN_1>(leds1, NUM_LEDS_1);
@@ -38,17 +40,32 @@ void setup() {
 }
 
 void loop() {
-  doStrandOneThing();
-  doStrandTwoThing();
-  doStrandThreeThing();
+
+  detectSomething = true;
+
+  if (!detectSomething) {
+    doStrandOneThing();
+    doStrandTwoAndThreeThing();
+    // doStrandTwoThing();
+    // doStrandThreeThing();
+  } else {
+    doThatOtherThing();
+  }
   delay(DELAY_VALUE);
 }
 
 void doStrandOneThing() {
 }
 
-void doStrandTwoThing() {
+// void doStrandTwoThing() {
+// }
+
+// void doStrandThreeThing() {
+// }
+
+void doStrandTwoAndThreeThing() {
 }
 
-void doStrandThreeThing() {
+
+void doThatOtherThing() {
 }
