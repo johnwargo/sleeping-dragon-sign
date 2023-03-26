@@ -22,12 +22,13 @@
 #define NUM_LEDS_3 5
 #define DATA_PIN_3 12
 
-#define DELAY_VALUE 200
+#define DELAY_VALUE 100
 
 CRGB leds1[NUM_LEDS_1];
 CRGB leds2[NUM_LEDS_2];
 CRGB leds3[NUM_LEDS_3];
 
+// used to determine whether the PIR sensor 'sensed' something
 bool detectSomething;
 
 void setup() {
@@ -42,7 +43,6 @@ void setup() {
 void loop() {
 
   detectSomething = true;
-
   if (!detectSomething) {
     doStrandOneThing();
     doStrandTwoAndThreeThing();
