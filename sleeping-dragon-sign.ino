@@ -31,12 +31,18 @@ CRGB leds3[NUM_LEDS_3];
 
 #define checkVal1 500
 #define checkVal2 500
+#define checkVal4 500
 unsigned long curTime1;
 unsigned long curTime2;
+unsigned long curTime4;
 bool direction1 = true;
 bool direction2 = true;
+bool direction4 = true;
 unsigned long prevTime1 = millis();
 unsigned long prevTime2 = millis();
+unsigned long prevTime4 = millis();
+
+bool strategyChanged = true;
 
 // used to determine whether the PIR sensor 'sensed' something
 bool detectSomething;
@@ -52,13 +58,12 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("Loop");
-  detectSomething = false;
+  // Serial.println("Loop");
+  detectSomething = true;
   if (!detectSomething) {
     doStrandOneThing();
-    doStrandTwoAndThreeThing();
-    // doStrandTwoThing();
-    // doStrandThreeThing();
+    doStrandTwoThing();
+    doStrandThreeThing();
   } else {
     doThatOtherThing();
   }
@@ -66,6 +71,7 @@ void loop() {
 }
 
 void doStrandOneThing() {
+  // Serial.println("doStrandOneThing");
   // Alternate the Warning Symbols White
   curTime1 = millis();
   if (curTime1 - prevTime1 > checkVal1) {
@@ -82,16 +88,10 @@ void doStrandOneThing() {
   }
 }
 
-// void doStrandTwoThing() {
-// }
-
-// void doStrandThreeThing() {
-// }
-
-void doStrandTwoAndThreeThing() {
-  // Fade Strand two (Red) and three (White) up and down
-
+void doStrandTwoThing() {
   int colorVal;
+
+  // Serial.println("doStrandTwoThing");
 
   curTime2 = millis();
   if (curTime2 - prevTime2 > checkVal2) {
@@ -114,7 +114,44 @@ void doStrandTwoAndThreeThing() {
   // FastLED.show();
 }
 
+void doStrandThreeThing() {
+  // Serial.println("doStrandThreeThing");
+  // Default behavior of strand three is all lights on and White.
+  // Did the strand 3 colors change elsewhere?
+  if (strategyChanged) {
+    // then we have to switch them back
+    strategyChanged = false;
+    // set all the LEDs to white
+    for (int i = 0; i < NUM_LEDS_3; i++) {
+      leds3[i] = CRGB::White;
+    }
+    FastLED.show();
+  }
+}
 
 void doThatOtherThing() {
   // Blink everything, strand 1 White, everything else Red
+  strategyChanged = true;
+  // everything blinks together
+  curTime4 = millis();
+  if (curTime4 - prevTime4 > checkVal4) {
+    prevTime4 = curTime4;
+    direction4 = !direction4;
+    if (direction4) {
+      setStrandColor(leds1, NUM_LEDS_1, CRGB::White);
+      setStrandColor(leds2, NUM_LEDS_2, CRGB::Red);
+      setStrandColor(leds3, NUM_LEDS_3, CRGB::Red);   
+    } else {
+      setStrandColor(leds1, NUM_LEDS_1, CRGB::Black);
+      setStrandColor(leds2, NUM_LEDS_2, CRGB::Black);
+      setStrandColor(leds3, NUM_LEDS_3, CRGB::Black);   
+    }
+    FastLED.show();
+  }
+}
+
+void setStrandColor(CRGB leds[], int numLEDs, CRGB color) {
+  for (int i = 0; i < numLEDs; i++) {
+    leds[i] = color;
+  }
 }
