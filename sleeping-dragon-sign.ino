@@ -28,10 +28,20 @@ CRGB leds1[NUM_LEDS_1];
 CRGB leds2[NUM_LEDS_2];
 CRGB leds3[NUM_LEDS_3];
 
+#define checkVal1 500
+#define checkVal2 500
+unsigned long curTime1;
+unsigned long curTime2;
+bool direction1 = true;
+bool direction2 = true;
+unsigned long prevTime1 = millis();
+unsigned long prevTime1 = millis();
+
 // used to determine whether the PIR sensor 'sensed' something
 bool detectSomething;
 
 void setup() {
+  Serial.begin(9600);
   // Initialize all of the LED arrays
   FastLED.addLeds<NEOPIXEL, DATA_PIN_1>(leds1, NUM_LEDS_1);
   FastLED.addLeds<NEOPIXEL, DATA_PIN_2>(leds2, NUM_LEDS_2);
@@ -41,8 +51,8 @@ void setup() {
 }
 
 void loop() {
-
-  detectSomething = true;
+  Serial.println("Loop");
+  detectSomething = false;
   if (!detectSomething) {
     doStrandOneThing();
     doStrandTwoAndThreeThing();
@@ -56,7 +66,19 @@ void loop() {
 
 void doStrandOneThing() {
   // Alternate the Warning Symbols White
-
+  curTime1 = millis();
+  if (curTime1 - prevTime1 > checkVal1) {
+    prevTime1 = curTime1;
+    direction1 = !direction1;
+    if (direction1) {
+      leds1[0] = CRGB::White;
+      leds1[1] = CRGB::Black;
+    } else {
+      leds1[0] = CRGB::Black;
+      leds1[1] = CRGB::White;
+    }
+    FastLED.show();
+  }  
 }
 
 // void doStrandTwoThing() {
@@ -68,11 +90,9 @@ void doStrandOneThing() {
 void doStrandTwoAndThreeThing() {
   // Fade Strand two and three up and down
   // strand 2 Red, strand 3 White
-
 }
 
 
 void doThatOtherThing() {
   // Blink everything, strand 1 White, everything else Red
-
 }
