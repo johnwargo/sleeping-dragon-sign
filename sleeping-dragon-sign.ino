@@ -67,7 +67,7 @@ void loop() {
   } else {
     doThatOtherThing();
   }
-  delay(DELAY_VALUE);
+  // delay(DELAY_VALUE);
 }
 
 void doStrandOneThing() {
@@ -100,8 +100,8 @@ void doStrandTwoThing() {
   }
 
   colorVal = round((curTime2 - prevTime2) / checkVal2);
-  Serial.println(colorVal);
-  delay(100);
+  // Serial.println(colorVal);
+  // delay(100);
 
   // for (int i = 0; i < NUM_LEDS_2; i++) {
   // // Red
@@ -117,7 +117,7 @@ void doStrandTwoThing() {
 void doStrandThreeThing() {
   // Serial.println("doStrandThreeThing");
   // Default behavior of strand three is all lights on and White.
-  // Did the strand 3 colors change elsewhere?
+  // Did the strand colors change elsewhere?
   if (strategyChanged) {
     // then we have to switch them back
     strategyChanged = false;
