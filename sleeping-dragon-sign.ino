@@ -31,7 +31,7 @@ CRGB leds3[NUM_LEDS_3];
 
 #define checkVal1 500
 #define checkVal2 500
-#define checkVal4 500
+#define checkVal4 250
 unsigned long curTime1;
 unsigned long curTime2;
 unsigned long curTime4;
@@ -59,7 +59,7 @@ void setup() {
 
 void loop() {
   // Serial.println("Loop");
-  detectSomething = true;
+  detectSomething = false;
   if (!detectSomething) {
     doStrandOneThing();
     doStrandTwoThing();
@@ -140,11 +140,9 @@ void doThatOtherThing() {
     if (direction4) {
       setStrandColor(leds1, NUM_LEDS_1, CRGB::White);
       setStrandColor(leds2, NUM_LEDS_2, CRGB::Red);
-      setStrandColor(leds3, NUM_LEDS_3, CRGB::Red);   
+      setStrandColor(leds3, NUM_LEDS_3, CRGB::Red);
     } else {
-      setStrandColor(leds1, NUM_LEDS_1, CRGB::Black);
-      setStrandColor(leds2, NUM_LEDS_2, CRGB::Black);
-      setStrandColor(leds3, NUM_LEDS_3, CRGB::Black);   
+      FastLED.clear();
     }
     FastLED.show();
   }
