@@ -10,6 +10,7 @@
   with three different strands of NeoPixels
 
 **************************************************/
+#include <math.h>
 #include <FastLED.h>
 
 // first strand
@@ -35,7 +36,7 @@ unsigned long curTime2;
 bool direction1 = true;
 bool direction2 = true;
 unsigned long prevTime1 = millis();
-unsigned long prevTime1 = millis();
+unsigned long prevTime2 = millis();
 
 // used to determine whether the PIR sensor 'sensed' something
 bool detectSomething;
@@ -78,7 +79,7 @@ void doStrandOneThing() {
       leds1[1] = CRGB::White;
     }
     FastLED.show();
-  }  
+  }
 }
 
 // void doStrandTwoThing() {
@@ -88,8 +89,29 @@ void doStrandOneThing() {
 // }
 
 void doStrandTwoAndThreeThing() {
-  // Fade Strand two and three up and down
-  // strand 2 Red, strand 3 White
+  // Fade Strand two (Red) and three (White) up and down
+
+  int colorVal;
+
+  curTime2 = millis();
+  if (curTime2 - prevTime2 > checkVal2) {
+    prevTime2 = curTime2;
+    direction2 = !direction2;
+  }
+
+  colorVal = round((curTime2 - prevTime2) / checkVal2);
+  Serial.println(colorVal);
+  delay(100);
+
+  // for (int i = 0; i < NUM_LEDS_2; i++) {
+  // // Red
+  //   leds2[i].setRGB(colorVal, 0, 0);
+  // }
+  // for (int i = 0; i < NUM_LEDS_3; i++) {
+  // // White
+  //   leds3[i].setRGB(colorVal, colorVal, colorVal);
+  // }
+  // FastLED.show();
 }
 
 
