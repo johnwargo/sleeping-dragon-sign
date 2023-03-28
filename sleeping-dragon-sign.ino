@@ -75,8 +75,8 @@ void loop() {
 }
 
 void doStrandOneThing() {
-  // Serial.println("doStrandOneThing");
   // Alternate the Warning Symbols White
+  // Serial.println("doStrandOneThing");  
   curTime1 = millis();
   if (curTime1 - prevTime1 > checkVal1) {
     prevTime1 = curTime1;
@@ -93,7 +93,8 @@ void doStrandOneThing() {
 }
 
 void doStrandTwoThing() {
-  // Serial.println("doStrandTwoThing");
+  // Fade strand 2 up and down in Red 
+  // Serial.println("doStrandTwoThing");  
   curTime2 = millis();
   if (curTime2 - prevTime2 > checkVal2) {
     Serial.println("switching direction");
@@ -113,9 +114,9 @@ void doStrandTwoThing() {
 }
 
 void doStrandThreeThing() {
+  // Default behavior of strand three is all lights on, White.
   // Serial.println("doStrandThreeThing");
-  // Default behavior of strand three is all lights on and White.
-  // Did the strand colors change elsewhere?
+    // Did the strand change elsewhere (doThatOtherThing)?
   if (strategyChanged) {
     // then we have to switch them back. otherwise leave them alone
     strategyChanged = false;
