@@ -13,6 +13,8 @@
 #include <math.h>
 #include <FastLED.h>
 
+#define inputPin 13
+
 // first strand
 #define NUM_LEDS_1 2
 #define DATA_PIN_1 10
@@ -45,10 +47,11 @@ unsigned long prevTime4 = millis();
 bool strategyChanged = true;
 
 // used to determine whether the PIR sensor 'sensed' something
-bool detectSomething;
+bool detectedSomething;
 
 void setup() {
-  Serial.begin(9600);
+  // Serial.begin(115200);
+  pinMode(inputPin, INPUT); 
   // Initialize all of the LED arrays
   FastLED.addLeds<NEOPIXEL, DATA_PIN_1>(leds1, NUM_LEDS_1);
   FastLED.addLeds<NEOPIXEL, DATA_PIN_2>(leds2, NUM_LEDS_2);
@@ -59,13 +62,14 @@ void setup() {
 
 void loop() {
   // Serial.println("Loop");
-  detectSomething = false;
-  if (!detectSomething) {
+  // Read the PIR sensor
+  detectedSomething = digitalRead(inputPin);
+  if (detectedSomething) {
+    doThatOtherThing();
+  } else {
     doStrandOneThing();
     doStrandTwoThing();
     doStrandThreeThing();
-  } else {
-    doThatOtherThing();
   }
   // delay(DELAY_VALUE);
 }
@@ -85,27 +89,24 @@ void doStrandOneThing() {
       leds1[1] = CRGB::White;
     }
     FastLED.show();
-    delay(100);
   }
 }
 
 void doStrandTwoThing() {
-  int colorVal;
-
   // Serial.println("doStrandTwoThing");
-
   curTime2 = millis();
   if (curTime2 - prevTime2 > checkVal2) {
+    Serial.println("switching direction");
     prevTime2 = curTime2;
     direction2 = !direction2;
   }
 
-  colorVal = round(((curTime2 - prevTime2) / checkVal2) * 255);
-
+  // had to convert the values to float to make the division work
+  int colorVal = round(((float(curTime2) - float(prevTime2)) / float(checkVal2)) * 255);
+  // Change direction
   if (direction2) colorVal = 255 - colorVal;
-  Serial.println(colorVal);
+  
   for (int i = 0; i < NUM_LEDS_2; i++) {
-    // Red
     leds2[i].setRGB(colorVal, 0, 0);
   }
   FastLED.show();
@@ -116,7 +117,7 @@ void doStrandThreeThing() {
   // Default behavior of strand three is all lights on and White.
   // Did the strand colors change elsewhere?
   if (strategyChanged) {
-    // then we have to switch them back
+    // then we have to switch them back. otherwise leave them alone
     strategyChanged = false;
     // set all the LEDs to white
     for (int i = 0; i < NUM_LEDS_3; i++) {
