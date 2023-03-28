@@ -30,7 +30,7 @@ CRGB leds2[NUM_LEDS_2];
 CRGB leds3[NUM_LEDS_3];
 
 #define checkVal1 500
-#define checkVal2 500
+#define checkVal2 1000
 #define checkVal4 250
 unsigned long curTime1;
 unsigned long curTime2;
@@ -85,6 +85,7 @@ void doStrandOneThing() {
       leds1[1] = CRGB::White;
     }
     FastLED.show();
+    delay(100);
   }
 }
 
@@ -99,19 +100,15 @@ void doStrandTwoThing() {
     direction2 = !direction2;
   }
 
-  colorVal = round((curTime2 - prevTime2) / checkVal2);
-  // Serial.println(colorVal);
-  // delay(100);
+  colorVal = round(((curTime2 - prevTime2) / checkVal2) * 255);
 
-  // for (int i = 0; i < NUM_LEDS_2; i++) {
-  // // Red
-  //   leds2[i].setRGB(colorVal, 0, 0);
-  // }
-  // for (int i = 0; i < NUM_LEDS_3; i++) {
-  // // White
-  //   leds3[i].setRGB(colorVal, colorVal, colorVal);
-  // }
-  // FastLED.show();
+  if (direction2) colorVal = 255 - colorVal;
+  Serial.println(colorVal);
+  for (int i = 0; i < NUM_LEDS_2; i++) {
+    // Red
+    leds2[i].setRGB(colorVal, 0, 0);
+  }
+  FastLED.show();
 }
 
 void doStrandThreeThing() {
