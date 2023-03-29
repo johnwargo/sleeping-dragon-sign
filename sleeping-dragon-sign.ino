@@ -25,14 +25,14 @@
 #define NUM_LEDS_3 5
 #define DATA_PIN_3 12
 
-#define DELAY_VALUE 100
+// #define DELAY_VALUE 100
 
 CRGB leds1[NUM_LEDS_1];
 CRGB leds2[NUM_LEDS_2];
 CRGB leds3[NUM_LEDS_3];
 
 #define checkVal1 500
-#define checkVal2 1000
+#define checkVal2 1500
 #define checkVal4 250
 unsigned long curTime1;
 unsigned long curTime2;
