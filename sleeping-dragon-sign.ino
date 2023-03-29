@@ -17,15 +17,15 @@
 
 // first strand
 #define NUM_LEDS_1 2
-#define DATA_PIN_1 10
+#define DATA_PIN_1 12
 // second strand
 #define NUM_LEDS_2 3
-#define DATA_PIN_2 11
+#define DATA_PIN_2 27
 // third strand
 #define NUM_LEDS_3 5
-#define DATA_PIN_3 12
+#define DATA_PIN_3 33
 
-// #define DELAY_VALUE 100
+#define DELAY_VALUE 100
 
 CRGB leds1[NUM_LEDS_1];
 CRGB leds2[NUM_LEDS_2];
@@ -51,7 +51,7 @@ bool detectedSomething;
 
 void setup() {
   // Serial.begin(115200);
-  pinMode(inputPin, INPUT); 
+  pinMode(inputPin, INPUT);
   // Initialize all of the LED arrays
   FastLED.addLeds<NEOPIXEL, DATA_PIN_1>(leds1, NUM_LEDS_1);
   FastLED.addLeds<NEOPIXEL, DATA_PIN_2>(leds2, NUM_LEDS_2);
@@ -76,7 +76,7 @@ void loop() {
 
 void doStrandOneThing() {
   // Alternate the Warning Symbols White
-  // Serial.println("doStrandOneThing");  
+  // Serial.println("doStrandOneThing");
   curTime1 = millis();
   if (curTime1 - prevTime1 > checkVal1) {
     prevTime1 = curTime1;
@@ -93,8 +93,8 @@ void doStrandOneThing() {
 }
 
 void doStrandTwoThing() {
-  // Fade strand 2 up and down in Red 
-  // Serial.println("doStrandTwoThing");  
+  // Fade strand 2 up and down in Red
+  // Serial.println("doStrandTwoThing");
   curTime2 = millis();
   if (curTime2 - prevTime2 > checkVal2) {
     Serial.println("switching direction");
@@ -106,7 +106,7 @@ void doStrandTwoThing() {
   int colorVal = round(((float(curTime2) - float(prevTime2)) / float(checkVal2)) * 255);
   // Change direction
   if (direction2) colorVal = 255 - colorVal;
-  
+
   for (int i = 0; i < NUM_LEDS_2; i++) {
     leds2[i].setRGB(colorVal, 0, 0);
   }
@@ -114,9 +114,9 @@ void doStrandTwoThing() {
 }
 
 void doStrandThreeThing() {
-  // Default behavior of strand three is all lights on, White.
+  // Default behavior of strand five is all lights on, White.
   // Serial.println("doStrandThreeThing");
-    // Did the strand change elsewhere (doThatOtherThing)?
+  // Did the strand change elsewhere (doThatOtherThing)?
   if (strategyChanged) {
     // then we have to switch them back. otherwise leave them alone
     strategyChanged = false;
