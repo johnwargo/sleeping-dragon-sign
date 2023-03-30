@@ -10,8 +10,14 @@
   with three different strands of NeoPixels
 
 **************************************************/
+
+// This sketch is currently setup for the Adafruit Huzzah32
+// https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/pinouts
+
 #include <math.h>
 #include <FastLED.h>
+
+#define DEBUG
 
 #define inputPin 13
 
@@ -32,7 +38,7 @@ CRGB leds2[NUM_LEDS_2];
 CRGB leds3[NUM_LEDS_3];
 
 #define checkVal1 500
-#define checkVal2 1500
+#define checkVal2 2000
 #define checkVal4 250
 unsigned long curTime1;
 unsigned long curTime2;
@@ -62,8 +68,14 @@ void setup() {
 
 void loop() {
   // Serial.println("Loop");
+
+#ifdef DEBUG
+  detectedSomething = false;
+#else
   // Read the PIR sensor
   detectedSomething = digitalRead(inputPin);
+#endif
+
   if (detectedSomething) {
     doThatOtherThing();
   } else {
