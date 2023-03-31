@@ -58,8 +58,8 @@ bool strategyChanged = true;
 // used to determine whether the PIR sensor 'sensed' something
 bool detectedSomething = false;
 // used to determine whether the mode switch changed position
-bool detectMode = true;
-bool lastDetectMode = true;
+bool detectMode = false;
+bool lastDetectMode = false;
 
 void setup() {
 
