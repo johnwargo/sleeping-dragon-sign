@@ -19,7 +19,10 @@
 
 #define DEBUG
 
-#define inputPin 13
+// PIR Sensor
+#define PIR_SENSOR_PIN 13
+// Mode switch input
+#define MODE_SWITCH_PIN 26
 
 // first strand
 #define NUM_LEDS_1 2
@@ -53,17 +56,30 @@ unsigned long prevTime4 = millis();
 bool strategyChanged = true;
 
 // used to determine whether the PIR sensor 'sensed' something
-bool detectedSomething;
+bool detectedSomething = false;
+// used to determine whether the mode switch changed position
+bool detectMode = true;
+bool lastDetectMode = true;
 
 void setup() {
-  // Serial.begin(115200);
-  pinMode(inputPin, INPUT);
+
+#ifdef DEBUG
+  Serial.begin(115200);
+#endif
+
+  pinMode(PIR_SENSOR_PIN, INPUT);
   // Initialize all of the LED arrays
   FastLED.addLeds<NEOPIXEL, DATA_PIN_1>(leds1, NUM_LEDS_1);
   FastLED.addLeds<NEOPIXEL, DATA_PIN_2>(leds2, NUM_LEDS_2);
   FastLED.addLeds<NEOPIXEL, DATA_PIN_3>(leds3, NUM_LEDS_3);
   // just to make sure
   FastLED.clear();  // clear all pixel data
+  // test all the lights
+  exerciseStrand(leds1, NUM_LEDS_1);
+  exerciseStrand(leds2, NUM_LEDS_2);
+  exerciseStrand(leds3, NUM_LEDS_3);
+  // wait a second
+  delay(1000);
 }
 
 void loop() {
@@ -73,15 +89,24 @@ void loop() {
   detectedSomething = false;
 #else
   // Read the PIR sensor
-  detectedSomething = digitalRead(inputPin);
+  detectedSomething = digitalRead(PIR_SENSOR_PIN);
 #endif
 
   if (detectedSomething) {
     doThatOtherThing();
   } else {
-    doStrandOneThing();
-    doStrandTwoThing();
-    doStrandThreeThing();
+    detectMode - digitalRead(MODE_SWITCH_PIN);
+    if (!detectMode) {
+      if (detectMode != lastDetectMode) {
+        lastDetectMode = detectMode;
+        strategyChanged = true;
+        FastLED.clear();
+        FastLED.show();
+      }
+      doStrandOneThing();
+      doStrandTwoThing();
+      doStrandThreeThing();
+    }
   }
   // delay(DELAY_VALUE);
 }
@@ -162,5 +187,16 @@ void doThatOtherThing() {
 void setStrandColor(CRGB leds[], int numLEDs, CRGB color) {
   for (int i = 0; i < numLEDs; i++) {
     leds[i] = color;
+  }
+}
+
+void exerciseStrand(CRGB leds[], int numLEDs) {
+  for (int i = 0; i < numLEDs; i++) {
+    leds[i] = CRGB::White;
+    FastLED.show();
+    delay(DELAY_VALUE);
+    leds[i] = CRGB::Black;
+    FastLED.show();
+    delay(DELAY_VALUE);
   }
 }
