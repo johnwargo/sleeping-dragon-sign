@@ -53,6 +53,8 @@ unsigned long prevTime1 = millis();
 unsigned long prevTime2 = millis();
 unsigned long prevTime4 = millis();
 
+// Flag to let the sketch know when switching between 
+// detected and not detected
 bool strategyChanged = true;
 
 // used to determine whether the PIR sensor 'sensed' something
