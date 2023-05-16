@@ -1,5 +1,3 @@
-#include <RTClib.h>
-
 /***********************************************
   Sleeping Dragon Sign
 
@@ -18,11 +16,11 @@
 
 #include <math.h>
 #include <FastLED.h>
-#include <SoftwareSerial.h>
-#include <DFRobot_mmWave_Radar.h>
 
 #define DEBUG
 
+// PIR Sensor
+#define PIR_SENSOR_PIN 13
 // Mode switch input
 #define MODE_SWITCH_PIN 26
 
@@ -65,20 +63,13 @@ bool detectedSomething = false;
 bool detectMode = false;
 bool lastDetectMode = false;
 
-SoftwareSerial mySerial(3, 2);
-DFRobot_mmWave_Radar sensor(&mySerial);
-
 void setup() {
 
 #ifdef DEBUG
   Serial.begin(115200);
 #endif
 
-  mySerial.begin(115200);
-  sensor.factoryReset();    //Restore to the factory settings 
-  sensor.DetRangeCfg(0, 9);    //The detection range is as far as 9m
-  sensor.OutputLatency(0, 0);
-
+  pinMode(PIR_SENSOR_PIN, INPUT);
   // Initialize all of the LED arrays
   FastLED.addLeds<NEOPIXEL, DATA_PIN_1>(leds1, NUM_LEDS_1);
   FastLED.addLeds<NEOPIXEL, DATA_PIN_2>(leds2, NUM_LEDS_2);
@@ -98,14 +89,15 @@ void loop() {
 
 #ifdef DEBUG
   detectedSomething = false;
-#else  
+#else
+  // Read the PIR sensor
   detectedSomething = digitalRead(PIR_SENSOR_PIN);
 #endif
 
   if (detectedSomething) {
     doThatOtherThing();
   } else {
-    detectMode = digitalRead(MODE_SWITCH_PIN);
+    detectMode - digitalRead(MODE_SWITCH_PIN);
     if (!detectMode) {
       if (detectMode != lastDetectMode) {
         lastDetectMode = detectMode;
