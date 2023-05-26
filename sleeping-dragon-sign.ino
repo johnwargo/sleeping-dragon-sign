@@ -1,5 +1,3 @@
-#include <RTClib.h>
-
 /***********************************************
   Sleeping Dragon Sign
 
@@ -16,15 +14,12 @@
 // This sketch is currently setup for the Adafruit Huzzah32
 // https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/pinouts
 
-#include <math.h>
 #include <FastLED.h>
-#include <SoftwareSerial.h>
+#include <math.h>
+#include <HardwareSerial.h>
 #include <DFRobot_mmWave_Radar.h>
 
 #define DEBUG
-
-// Mode switch input
-#define MODE_SWITCH_PIN 26
 
 // first strand
 #define NUM_LEDS_1 2
@@ -55,28 +50,27 @@ unsigned long prevTime1 = millis();
 unsigned long prevTime2 = millis();
 unsigned long prevTime4 = millis();
 
-// Flag to let the sketch know when switching between 
+// Flag to let the sketch know when switching between
 // detected and not detected
 bool strategyChanged = true;
 
-// used to determine whether the PIR sensor 'sensed' something
+// used to determine whether the sensor 'sensed' a person
 bool detectedSomething = false;
-// used to determine whether the mode switch changed position
-bool detectMode = false;
-bool lastDetectMode = false;
 
-SoftwareSerial mySerial(3, 2);
-DFRobot_mmWave_Radar sensor(&mySerial);
+HardwareSerial SerialPort(1);
+DFRobot_mmWave_Radar sensor(&SerialPort);
 
 void setup() {
 
 #ifdef DEBUG
+  // Enable serial connection to the IDE
   Serial.begin(115200);
 #endif
 
-  mySerial.begin(115200);
-  sensor.factoryReset();    //Restore to the factory settings 
-  sensor.DetRangeCfg(0, 9);    //The detection range is as far as 9m
+  // Initialize communication with the mmWave board
+  SerialPort.begin(15200, SERIAL_8N1, 20, 22);
+  sensor.factoryReset();     //Restore to the factory settings
+  sensor.DetRangeCfg(0, 3);  //The detection range is as far as 3m
   sensor.OutputLatency(0, 0);
 
   // Initialize all of the LED arrays
@@ -89,8 +83,6 @@ void setup() {
   exerciseStrand(leds1, NUM_LEDS_1);
   exerciseStrand(leds2, NUM_LEDS_2);
   exerciseStrand(leds3, NUM_LEDS_3);
-  // wait a second
-  delay(1000);
 }
 
 void loop() {
@@ -98,25 +90,16 @@ void loop() {
 
 #ifdef DEBUG
   detectedSomething = false;
-#else  
+#else
   detectedSomething = digitalRead(PIR_SENSOR_PIN);
 #endif
 
   if (detectedSomething) {
     doThatOtherThing();
   } else {
-    detectMode = digitalRead(MODE_SWITCH_PIN);
-    if (!detectMode) {
-      if (detectMode != lastDetectMode) {
-        lastDetectMode = detectMode;
-        strategyChanged = true;
-        FastLED.clear();
-        FastLED.show();
-      }
-      doStrandOneThing();
-      doStrandTwoThing();
-      doStrandThreeThing();
-    }
+    doStrandOneThing();
+    doStrandTwoThing();
+    doStrandThreeThing();
   }
   // delay(DELAY_VALUE);
 }
@@ -209,4 +192,5 @@ void exerciseStrand(CRGB leds[], int numLEDs) {
     FastLED.show();
     delay(DELAY_VALUE);
   }
+  delay(500);
 }
